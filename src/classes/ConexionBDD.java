@@ -26,7 +26,7 @@ package classes;
 	                String usuario = rs.getString("USUARIO");
 	                String contraseña = rs.getString("CONTRASEÑA");
 	              
-	                
+	                //hola
 	               String out = String.format("%s, %s", usuario, contraseña);
 	                
 	               System.out.println(out);
