@@ -38,52 +38,60 @@ public class Insert extends HttpServlet {
         String user = "SA";
         String password = "";
         
-        
         //DADES FORMULARI 
         String userForm = request.getParameter("user");
 		String pass = request.getParameter("password");
-		//String email = request.getParameter("email");
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection con = null;
+		boolean esta= false;
+       	
         try {
-			Class.forName("org.hsqldb.jdbcDriver");
-		
-        try (Connection con = DriverManager.getConnection(url, user, password)) {
-        	boolean esta= false;
-        	//RECUPEREM LES DADES DE LA TAULA
-        	Statement stmt = con.createStatement();
-        	ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE USUARIO='"+userForm+"'");
-            
-            while(rs.next()) {              
-                String usuario = rs.getString("USUARIO");
-                if(userForm.equalsIgnoreCase(usuario)) {
-        			esta=true;
-        		}
-            }	
-        
-    		//CONSULTA INSERT
-    		if(esta==false) {
-    			stmt.executeUpdate("INSERT INTO USERS (USUARIO,CONTRASEÑA)" + "VALUES ('"+userForm+"','"+pass+"')");
-        		con.commit();         	
-            	getServletContext().getRequestDispatcher("/JSP/oklogin.jsp").forward(request, resp);
-    		}
-    		if(esta==true) {
-    			getServletContext().getRequestDispatcher("/JSP/errorlogin.jsp").forward(request, resp);
-    		}
-    	
-		    
-        	//System.out.println("Insertado correctamente");
-        
+        		con = DriverManager.getConnection(url, user, password);
+        		
+        		Class.forName("org.hsqldb.jdbcDriver");
+        		
+        		stmt = con.createStatement();
+        		rs = stmt.executeQuery("SELECT * FROM USERS WHERE USUARIO='"+userForm+"'");
+        		
+        		//RECUPEREM LES DADES DE LA TAULA
+        	        
+        		while(rs.next()) {              
+        			String usuario = rs.getString("USUARIO");
+        			if(userForm.equalsIgnoreCase(usuario)) {
+        				esta=true;
+        			}
+        		}	 
+        		//CONSULTA INSERT
+        		if(!esta) {
+        			stmt.executeUpdate("INSERT INTO USERS (USUARIO,CONTRASEÑA)" + "VALUES ('"+userForm+"','"+pass+"')");
+        			con.commit();         	
+        			getServletContext().getRequestDispatcher("/JSP/oklogin.jsp").forward(request, resp);
+        		}else {
+        			getServletContext().getRequestDispatcher("/JSP/errorlogin.jsp").forward(request, resp);
+        		}      
         } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        	e.printStackTrace();		
         } catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        
-	
-        
-	}
+        	e1.printStackTrace();
+        } finally {
+        	if (stmt != null) {
+                try {
+                	stmt.close();
+                } catch (SQLException e) {  }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {  }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {  }
+            }
+        }
+	}	
 
 
 
@@ -91,7 +99,6 @@ public class Insert extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

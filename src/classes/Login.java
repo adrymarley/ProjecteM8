@@ -22,14 +22,13 @@ public class Login extends HttpServlet {
      */
     public Login() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	
 		String user = request.getParameter("user");
 		String pass = request.getParameter("password");
 		String email = request.getParameter("email");
@@ -44,7 +43,7 @@ public class Login extends HttpServlet {
 		Pattern p3 = Pattern.compile(emailComp);
 		Matcher m3 = p3.matcher(email);
 		
-		if(m1.matches()==true && m2.matches()==true && m3.matches()==true) {
+		if(m1.matches() && m2.matches() && m3.matches()) {
 			
 			request.getSession().setAttribute("Usuario", user);
 
@@ -61,7 +60,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		doGet(request, response);
 	}
 
