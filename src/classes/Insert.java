@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation class Form
@@ -71,9 +73,11 @@ public class Insert extends HttpServlet {
         			getServletContext().getRequestDispatcher("/JSP/errorlogin.jsp").forward(request, resp);
         		}      
         } catch (SQLException e) {
-        	e.printStackTrace();		
+        	Logger.getLogger(getClass().getName()).log(
+                    Level.SEVERE, "Mensaje crítico...", e);
         } catch (ClassNotFoundException e1) {
-        	e1.printStackTrace();
+        	Logger.getLogger(getClass().getName()).log(
+                    Level.SEVERE, "Mensaje crítico...", e1);
         } finally {
         	if (stmt != null) {
                 try {
